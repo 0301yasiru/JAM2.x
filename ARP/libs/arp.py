@@ -113,18 +113,6 @@ class ARPdetect:
         self.__real_packets = 0
         self.__spoof_packets = 0
 
-        self.Black   = '\u001b[30m'
-        self.Red     = '\u001b[31m'
-        self.Green   = '\u001b[32m'
-
-        self.back_Black   = '\u001b[40m'
-        self.back_Red     = '\u001b[41m'
-        self.back_Green   = '\u001b[42m'
-
-        self.RESET   = '\u001b[0m'
-        self.BOLD    = '\u001b[1m'
-        self.DARKEN  = '\u001b[2m'
-
     def request_mac(self, ip):
 
         """
@@ -160,8 +148,8 @@ class ARPdetect:
                     else:
                         self.__spoof_packets += 1 # this is a spoofed packet
 
-                    print(f'{self.back_Green } Real packets    : {self.RESET + self.BOLD} {self.__real_packets}')
-                    print(f'{self.back_Red}    Spoofing packets: {self.RESET + self.BOLD} {self.__spoof_packets}')
+                    print(f'\n Real packets    : {self.__real_packets}')
+                    print(f' Spoofing packets: {self.__spoof_packets}')
                     sys.stdout.write("\x1b[1A"*2)
 
                 except IndexError:
