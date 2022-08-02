@@ -110,6 +110,22 @@ class ARPdetect:
 
         self.interface = str(interface)
 
+    def request_mac(self, ip):
+
+        """
+        DOCSTRING: this function will create a ARP request to broadcast ans ask the MAC address of a given IP
+        ip:        ip is the IP address of the machine which we need the MAC (a string)
+        return:    the mac address of the machine (a string)
+        """
+        # create a ARP packet using scapy
+        arp_packet = scapy.ARP(pdst = ip) # creating a arp request to ask the mac of a ip
+        broadcast = scapy.Ether(dst = "ff:ff:ff:ff:ff:ff")
+
+        arp_req_broadcast =  broadcast / arp_packet
+        answers = scapy.srp(arp_req_broadcast, timeout = 1, verbose = False)[0]
+
+        return answers[0][1].hwsrc
+
     def process_packet(self, packet):
         """
         DOCSTRING: this function will process all the packets captured by the sniffing function.
@@ -120,7 +136,16 @@ class ARPdetect:
 
         if packet.haslayer(scapy.ARP): # checking if the packet has a ARP layer
             if packet[scapy.ARP].op == 2: # checking weather the ARP is a response?
-                packet.show()
+                try:
+                    real_mac = self.request_mac(packet[scapy.ARP].psrc)
+                    response_mac = packet[scapy.ARP].hwsrc
+
+                    print(real_mac, response_mac)
+
+                except IndexError:
+                    pass
+
+
 
 
     def detect(self):
