@@ -123,6 +123,6 @@ class ARPdetect:
                 packet.show()
 
 
-    def detect_arp(self):
+    def detect(self):
         scapy.sniff(iface = self.interface, store = False, prn = self.process_packet)
 
