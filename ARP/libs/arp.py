@@ -2,6 +2,7 @@ from struct import pack
 import scapy.all as scapy
 import time
 from subprocess import call
+import sys
 
 
 class ARPspoof:
@@ -109,6 +110,8 @@ class ARPdetect:
         """
 
         self.interface = str(interface)
+        self.__real_packets = 0
+        self.__spoof_packets = 0
 
     def request_mac(self, ip):
 
@@ -140,13 +143,17 @@ class ARPdetect:
                     real_mac = self.request_mac(packet[scapy.ARP].psrc)
                     response_mac = packet[scapy.ARP].hwsrc
 
-                    print(real_mac, response_mac)
+                    if real_mac == response_mac:
+                        self.__real_packets += 1 # this is a real ARP response
+                    else:
+                        self.__spoof_packets += 1 # this is a spoofed packet
+
+                    print(f'Real packets    : {self.__real_packets}')
+                    print(f'Spoofing packets: {self.__spoof_packets}')
+                    sys.stdout.write("\x1b[1A"*2)
 
                 except IndexError:
                     pass
-
-
-
 
     def detect(self):
         scapy.sniff(iface = self.interface, store = False, prn = self.process_packet)
