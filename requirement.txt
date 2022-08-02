@@ -1,1 +1,4 @@
-pip install --pre scapy[basic]
+scapy==2.4.4
+NetfilterQueue==1.0.0
+
+
