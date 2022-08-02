@@ -1,5 +1,5 @@
 # !/usr/bin/python3
-from libs.arpattack import ARPspoof
+from libs.arp import ARPspoof
 
 # define global variables
 TARGET_IP = "10.0.2.10"

@@ -1,6 +1,8 @@
+from struct import pack
 import scapy.all as scapy
 import time
 from subprocess import call
+
 
 class ARPspoof:
     def __init__(self, target, router, ip_forward = True):
@@ -96,3 +98,31 @@ class ARPspoof:
         self.send_arp_packet(self.router, self.target, True)
         self.send_arp_packet(self.target, self.router, True)
         print("[+] Restored original ARP tables")
+
+
+class ARPdetect:
+    def __init__(self, interface):
+
+        """
+        DOCSTRING: this function intializes the ARP detection function
+        interface: this is the interface we are monitoring
+        """
+
+        self.interface = str(interface)
+
+    def process_packet(self, packet):
+        """
+        DOCSTRING: this function will process all the packets captured by the sniffing function.
+                   and search for ARP packets. if we have a ARP packet then check if that is a response. then check
+                   if the source is really the router
+        packet:    is a scapy packet sniffed by scapy
+        """
+
+        if packet.haslayer(scapy.ARP): # checking if the packet has a ARP layer
+            if packet[scapy.ARP].op == 2: # checking weather the ARP is a response?
+                packet.show()
+
+
+    def detect_arp(self):
+        scapy.sniff(iface = self.interface, store = False, prn = self.process_packet)
+
