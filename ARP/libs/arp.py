@@ -4,7 +4,6 @@ import time
 from subprocess import call
 import sys
 import RPi.GPIO as GPIO
-import threading
 
 
 class ARPspoof:
@@ -156,10 +155,11 @@ class ARPdetect:
                     else:
                         self.__spoof_packets += 1 # this is a spoofed packet
 
-                        print("ARP Spoof detected")
-                        GPIO.output(18, GPIO.HIGH) #sound alarm
-                        input("Press any key to reset the sequrity system ...")
-                        GPIO.output(18, GPIO.LOW) # off the alarm
+                        print("Detected")
+                        # print("ARP Spoof detected")
+                        # GPIO.output(18, GPIO.HIGH) #sound alarm
+                        # input("Press any key to reset the sequrity system ...")
+                        # GPIO.output(18, GPIO.LOW) # off the alarm
 
                     # print(f'\n Real packets    : {self.__real_packets}')
                     # print(f' Spoofing packets: {self.__spoof_packets}')
