@@ -120,19 +120,6 @@ class ARPdetect:
         GPIO.setup(18, GPIO.OUT)
         GPIO.output(18, GPIO.LOW) # start with low
 
-        self.spoof_status = False
-
-        alarm_thread = threading.Thread(target=self.sound_alarm)
-        alarm_thread.start()
-        alarm_thread.join()
-
-
-    def sound_alarm(self):
-        while True:
-            if self.spoof_status:
-                GPIO.output(18, GPIO.HIGH) #sound alarm
-            else:
-                GPIO.output(18, GPIO.LOW) # off the alarm
 
     def request_mac(self, ip):
 
@@ -168,10 +155,11 @@ class ARPdetect:
                         self.__real_packets += 1 # this is a real ARP response
                     else:
                         self.__spoof_packets += 1 # this is a spoofed packet
+
                         print("ARP Spoof detected")
-                        self.spoof_status = True
+                        GPIO.output(18, GPIO.HIGH) #sound alarm
                         input("Press any key to reset the sequrity system ...")
-                        self.spoof_status = False
+                        GPIO.output(18, GPIO.LOW) # off the alarm
 
                     # print(f'\n Real packets    : {self.__real_packets}')
                     # print(f' Spoofing packets: {self.__spoof_packets}')
