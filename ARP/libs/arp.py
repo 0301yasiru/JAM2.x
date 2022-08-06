@@ -116,8 +116,8 @@ class ARPdetect:
         
         # initializing the BOARD
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(18, GPIO.OUT)
-        GPIO.output(18, GPIO.LOW) # start with low
+        GPIO.setup(17, GPIO.OUT)
+        GPIO.output(17, GPIO.LOW) # start with low
 
 
     def request_mac(self, ip):
@@ -155,15 +155,11 @@ class ARPdetect:
                     else:
                         self.__spoof_packets += 1 # this is a spoofed packet
 
-                        print("Detected")
-                        # print("ARP Spoof detected")
-                        # GPIO.output(18, GPIO.HIGH) #sound alarm
-                        # input("Press any key to reset the sequrity system ...")
-                        # GPIO.output(18, GPIO.LOW) # off the alarm
+                        print("ARP Spoof detected")
+                        GPIO.output(17, GPIO.HIGH) #sound alarm
+                        input("Press any key to reset the sequrity system ...")
+                        GPIO.output(17, GPIO.LOW) # off the alarm
 
-                    # print(f'\n Real packets    : {self.__real_packets}')
-                    # print(f' Spoofing packets: {self.__spoof_packets}')
-                    # sys.stdout.write("\x1b[1A"*2)
 
 
                 except IndexError:
