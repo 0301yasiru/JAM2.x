@@ -16,9 +16,9 @@ if options.mode:
     ## setting to monitor mode
     if options.iface:
         if (options.mode == 'monitor') | (options.mode == 'managed'):
-            call(f'sudo ifconfig {options.iface} down')
-            call(f'sudo iwconfig {options.iface} mode {options.mode}')
-            call(f'sudo ifconfig {options.iface} up')
+            call(f'sudo ifconfig {options.iface} down', shell=False)
+            call(f'sudo iwconfig {options.iface} mode {options.mode}', shell=False)
+            call(f'sudo ifconfig {options.iface} up', shell=False)
             print(f'[+] {options.iface} changed to {options.mode} mode')
 
         else:
