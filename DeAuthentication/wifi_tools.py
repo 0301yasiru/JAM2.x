@@ -14,7 +14,7 @@ parser.add_option('-m', '--mode', dest = 'mode', help = 'mode of the interface y
 
 if options.mode:
     ## setting to monitor mode
-    if options.mode == 'monitor' | options.mode == 'managed':
+    if (options.mode == 'monitor') | (options.mode == 'managed'):
         call(f'sudo ifconfig {options.iface} down')
         call(f'sudo iwconfig {options.iface} mode {options.mode}')
         call(f'sudo ifconfig {options.iface} up')
